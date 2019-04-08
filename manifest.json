@@ -1,7 +1,7 @@
 {
-    "name": "Example Extension",
+    "name": "MLBC Lookup",
     "version": "1.0",
-    "description": "Build an Extension",
+    "description": "Look up listings & history for a player in MLB Champions",
     "permissions": ["activeTab", "tabs", "declarativeContent", "storage", "https://mlbc.app/*"],
     "background": {
         "scripts": ["background.js"],
