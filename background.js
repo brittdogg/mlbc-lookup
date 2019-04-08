@@ -30,7 +30,7 @@ chrome.runtime.onInstalled.addListener(function() {
         // TODO Instead, create a custom page with two frames & pass the player name to it.
         chrome.tabs.create({url: "https://cryptoslam.io/player/" + playerUrlString}, function(tab){console.log("hello create tab")});
         chrome.tabs.create({url: "https://mlbc.app/marketplace"}, function(newTab) {
-          chrome.tabs.executeScript(newTab.id, {file: "jquery-3.3.1.min.js"}, function(result) {
+          chrome.tabs.executeScript(newTab.id, {file: "lib/jquery-3.3.1.min.js"}, function(result) {
           chrome.tabs.executeScript(newTab.id, {file: "mlb-search.js"}, function(result) {
             chrome.tabs.sendMessage(newTab.id, {player: request.player});
           });
