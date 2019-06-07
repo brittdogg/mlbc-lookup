@@ -1,34 +1,55 @@
-window.addEventListener("load", async function() {
-    await wait()
-    decorateCards()
-})
+// Select the node that will be observed for mutations
+var targetNode = document.body;
+
+// Options for the observer (which mutations to observe)
+var config = { attributes: true, childList: true, subtree: true };
+
+
+var observer = new MutationObserver(function(mutationsList) {
+    for(var mutation of mutationsList) {
+
+        if (mutation.type == 'childList') {
+
+            let nodes = _getNodesWithName(mutation.addedNodes, "ES-ASSETVIEW-CARD")
+
+            if (nodes.length > 0) {
+                _decorateCards(nodes)
+            }   
+        }
+    }
+});
+
+// Start observing the target node for configured mutations
+observer.observe(targetNode, config);
 
 
 
 
-async function wait() {
 
-    while(!document.querySelector(".mat-paginator-page-size-select .mat-select-value-text span")) {
-        await new Promise(r => setTimeout(r, 500));
+
+function _getNodesWithName(nodes, name) {
+
+    let matches = []
+
+    for (let addedNode of nodes) {
+
+        if (addedNode && addedNode.attributes) {
+            let nodeName = addedNode.nodeName
+
+            if (nodeName == name) {
+                matches.push(addedNode)
+            }
+        }
     }
 
-    let pagingValue = document.querySelector(".mat-paginator-page-size-select .mat-select-value-text span");
-
-    let count = parseInt(pagingValue.innerHTML) 
-
-    let list
-    do {
-        await new Promise(r => setTimeout(r, 1000));
-        list = document.querySelectorAll("section.es-assetcard")
-    } while(list.length < count)
+    return matches
 
 }
 
 
-function decorateCards() {
 
-    // add a SELL button to every player card on screen.
-    let playerCards = document.querySelectorAll("section.es-assetcard");
+function _decorateCards(playerCards) {
+
     for (let player of playerCards) {
 
         // prevent adding multiple sell buttons to the same card.
@@ -42,7 +63,7 @@ function decorateCards() {
         let buttonText = document.createTextNode("SELL");
         sellButton.appendChild(buttonText);
 
-        sellButton.addEventListener("click", sellClicked)
+        sellButton.addEventListener("click", _sellClicked)
 
         player.querySelector(".box-outercard").appendChild(sellButton);
     }
@@ -50,7 +71,7 @@ function decorateCards() {
 }
 
 
-function sellClicked(e) {
+function _sellClicked(e) {
 
     let playerName = this.parentNode.parentNode.querySelector(".show-name").textContent;
     let name = playerName.substr(0, playerName.indexOf("#"));
@@ -66,11 +87,3 @@ function sellClicked(e) {
 
      // chrome.runtime.sendMessage({player: name});
 }
-
-
-
-
-
-
-
-
