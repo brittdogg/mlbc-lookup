@@ -7,6 +7,14 @@
         "scripts": ["background.js"],
         "persistent": false
     },
+    "content_scripts": [
+        {
+          "matches": [
+            "https://mlbc.app/*"
+          ],
+          "js": ["content-script.js"]
+        }
+      ],
     "page_action": {
         "default_popup": "popup.html",
         "default_icon": {
@@ -22,5 +30,8 @@
         "48": "images/get_started48.png",
         "128": "images/get_started128.png"
     },
+    "web_accessible_resources": [
+        "iframe.html"
+      ],
     "manifest_version": 2
 }
