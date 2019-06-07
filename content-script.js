@@ -73,17 +73,32 @@ function _decorateCards(playerCards) {
 
 function _sellClicked(e) {
 
-    let playerName = this.parentNode.parentNode.querySelector(".show-name").textContent;
+    let node = this.parentNode.parentNode
+
+    let listItem = node.querySelector('.box-innercard .description ul li:nth-child(6)')
+
+    // let sn2019 = listItem.querySelector('span:nth-child(1)').innerHTML
+    let snMlbc = listItem.querySelector('span:nth-child(2)').innerHTML
+    snMlbc = snMlbc.replace('MLBC SN# ', '')
+    snMlbc = snMlbc.trim()
+
+
+    let playerName = node.querySelector(".show-name").textContent;
     let name = playerName.substr(0, playerName.indexOf("#"));
 
-    // let playerUrlString = name.replace(" ", "-");
+    let playerUrlString = name.replace(" ", "-");
 
     var iframe = document.createElement('iframe');
-    iframe.src  = chrome.extension.getURL ('iframe.html');
+    iframe.src  = chrome.extension.getURL ('iframe.html?name='+ playerUrlString + '&sn='+ snMlbc);
 
-    // iframe.setAttribute("src", "https://cryptoslam.io/player/" + playerUrlString );
-    iframe.setAttribute("style", "position: fixed; bottom: 0; width: 100%; height: 100%");
+    iframe.setAttribute("style", "position: fixed; bottom: 0; width: 100%; height: 500px");
+
+
+
+
     document.body.appendChild(iframe);
 
-     // chrome.runtime.sendMessage({player: name});
+
+    // iframe.contentWindow.document.body.appendChild(iframeScript)
+
 }
