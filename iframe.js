@@ -1,69 +1,134 @@
-
-
 let playerName = getParameterByName("name")
 let playerSn = getParameterByName("sn")
-
-let h1 = document.getElementById("name")
-// let h2 = document.getElementById("sn")
+let season = getParameterByName("season")
 
 playerName = playerName.trim()
 playerSn = playerSn.trim()
 
-h1.innerHTML = playerName
-// h2.innerHTML = playerSn
 
-
-
-loadCryptoslam(playerName, playerSn)
+loadCryptoslam(playerName, playerSn, season)
 
 
 
 
-async function loadCryptoslam(playerName, playerSn) {
+async function loadCryptoslam(playerName, playerSn, season) {
 
-    let sales = await loadSales(playerName)
-
+    let playerSales = await loadPlayerSales(playerName)
     let marketplace = await loadMarketplace(playerName)
+    let mint = await loadMint(playerSn, season)
+    let tokenSales = await loadTokenSales(playerSn)
 
-    let salesDiv = document.getElementById('sales-tab')
+    let tokenDiv = document.getElementById('token-tab')
+    let itemDiv = document.getElementById('item-info')
+    let playerSalesDiv = document.getElementById('player-sales-tab')
     let marketDiv = document.getElementById('market-tab')
 
-    salesDiv.appendChild(buildSalesTable(sales))
-    marketDiv.appendChild(buildMarketplaceTable(marketplace))
+    if (mint) {
+        itemDiv.appendChild(buildInfo(mint.Items ? mint.Items[0] : null ))
+    }
+    
+
+    if (playerSales.Items) {
+        playerSalesDiv.appendChild(buildSalesTable("Player Sales", playerSales.Items))
+    }
+
+    if (tokenSales) {
+        tokenDiv.appendChild(buildSalesTable("Token Sales", tokenSales))
+    }
+    
+    if (marketplace) {
+        marketDiv.appendChild(buildMarketplaceTable(marketplace))
+    }
+    
 
     document.getElementById('closeIframe').addEventListener('click', function() {
         closeIframe()
     })
+
+
+    document.getElementById('spinner').remove()
+
     
 }
 
 
-function buildSalesTable(sales) {
+
+
+
+function buildInfo(item) {
+
+    let divElement = document.createElement("div")
+
+    if (!item) {
+        return divElement
+    } 
+
+    let div = `
+        <div class="card-body">
+            <h1 class="card-title">${item.Season} ${item.Name} (${item.Base}) <span class="badge badge-secondary">${item.TokenId}</span></h5>
+            <h4 class="card-subtitle mb-2 text-muted">${item.Team} #${item.UniformNumber}</h4>
+
+            <p>
+                <a href="https://mlbc.app/figure/${item.TokenId}" target="blank">View on MLBC</a> - 
+                <a href="https://cryptoslam.io/mint/${item.Season}/mlb-crypto-baseball/${item.TokenId}" target="blank">View card on Cryptoslam</a> - 
+                <a href="https://cryptoslam.io/player/${item.Name.replace(" ", "-")}" target="blank">${item.Name} on Cryptoslam</a>
+            </p>
+
+            <ul>
+                <li><strong>Position:</strong><span>${item.Position}</span> </li>    
+                <li><strong>Stance:</strong><span>${item.Stance}</span> </li>
+                <li><strong>Equipment:</strong><span>${item.Equipment}</span> </li>
+                <li><strong>Uniform:</strong><span>${item.Uniform}</span> </li>
+                <li><strong>Event:</strong><span>${item.Ability}</span> </li>
+                <li><strong>Born On:</strong><span>${item.BornOn}</span> </li>
+                <li><strong>Owner:</strong><span>${item.Owner}</span> </li>
+            </ul>
+
+        </div>
+    `
+
+    
+    divElement.setAttribute("class",'card col-md-12')
+
+    divElement.innerHTML = div 
+
+    return divElement
+
+}
+
+
+function buildSalesTable(title, sales) {
+
+    let divElement = document.createElement("div")
+
+    if (!sales || !sales || sales.length < 1) {
+        return divElement
+    }
 
     let table = `
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <th>Date</th>
-                    <th>Crypto</th>
-                    <th>Owner</th>
-                    <th>Equipment</th>
-                    <th>Stance</th>
-                    <th>Uniform</th>
-                    <th>Price</th>
-                    <th>$ Price</th>
-                </thead>
+        <h3>${title}</h3>
+        <table class="table table-striped table-bordered table-sm col-md-12 cryptoslam-table">
+            <thead>
+                <th>Date</th>
+                <th>Crypto</th>
+                <th>Owner</th>
+                <th>Equipment</th>
+                <th>Stance</th>
+                <th>Uniform</th>
+                <th>Price</th>
+                <th>$ Price</th>
+            </thead>
     `
     
-    for (let sale of sales.Items) {
+    for (let sale of sales) {
         table += `
             <tr>
                 <td>${moment(sale.SoldOnUtc).fromNow()}</td>
-                <td class="crypto">${sale.Season} ${sale.Name} (${sale.Base})</td>
+                <td class="crypto"><a href="https://mlbc.app/figure/${sale.TokenId}" target="blank">${sale.Season} ${sale.Name} (${sale.Base})</a></td>
                 <td class="owner">${sale.SellerOwnerAddress}</td>
                 <td>${sale.Equipment}</td>
                 <td>${sale.StanceOpponent}</td>
-                <td>${sale.Uniform}</td>
+                <td class="uniform">${sale.Uniform}</td>
                 <td class="price">Ξ ${sale.SalesPriceEth.toFixed(5)}</td>
                 <td class="price">$${sale.SalesPriceUsd.toFixed(2)}</td>
             </tr>
@@ -71,12 +136,11 @@ function buildSalesTable(sales) {
     }
     table += "</table></div>"
 
-    let tableElement = document.createElement("table")
-    tableElement.setAttribute("class",'table table-striped table-bordered table-sm col-md-12 cryptoslam-table')
+    divElement.setAttribute("class", "table-responsive")
 
-    tableElement.innerHTML = table 
+    divElement.innerHTML = table 
 
-    return tableElement
+    return divElement
 }
 
 
@@ -84,46 +148,61 @@ function buildSalesTable(sales) {
 function buildMarketplaceTable(listings) {
 
     let table = `
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <th>Date</th>
-                    <th>Crypto</th>
-                    <th>Owner</th>
-                    <th>Equipment</th>
-                    <th>Stance</th>
-                    <th>Uniform</th>
-                    <th>Price</th>
-                </thead>
+        <h3>Marketplace</h3>
+        <table class="table table-striped table-bordered table-sm col-md-12 cryptoslam-table">
+            <thead>
+                <th>Date</th>
+                <th>Crypto</th>
+                <th>Owner</th>
+                <th>Equipment</th>
+                <th>Stance</th>
+                <th>Uniform</th>
+                <th>Price</th>
+            </thead>
     `
     
     for (let listing of listings) {
         table += `
             <tr>
                 <td>${moment(listing.CreatedOn).fromNow()}</td>
-                <td class="crypto">${listing.Season} ${listing.Name} (${listing.Base})</td>
+                <td class="crypto"><a href="https://mlbc.app/figure/${listing.TokenId}" target="blank">${listing.Season} ${listing.Name} (${listing.Base})</a></td>
                 <td class="owner">${listing.OwnerDisplay}</td>
                 <td>${listing.Equipment}</td>
                 <td>${listing.StanceOpponent}</td>
-                <td>${listing.Uniform}</td>
+                <td class="uniform">${listing.Uniform}</td>
                 <td class="price">Ξ ${listing.CurrentPriceEth.toFixed(5)}</td>
             </tr>
         `
     }
     table += "</table></div>"
 
-    let tableElement = document.createElement("table")
-    tableElement.setAttribute("class",'table table-striped table-bordered table-sm col-md-12 cryptoslam-table')
+    let divElement = document.createElement("div")
+    divElement.setAttribute("class", "table-responsive")
 
 
-    tableElement.innerHTML = table 
+    divElement.innerHTML = table 
 
-    return tableElement
+    return divElement
 }
 
 
+/**
+ * 
+ * End view 
+ */
 
-async function loadSales(playerName) {
+
+
+
+
+
+/**
+ * 
+ * TODO: Create a service for these
+ */
+
+
+async function loadPlayerSales(playerName) {
 
     let url = `https://api.cryptoslam.io/api/player/${playerName}/sales?num=25&_=${Math.floor(Date.now())}`
 
@@ -132,6 +211,11 @@ async function loadSales(playerName) {
     let body = await result.text()
 
     let parsed = JSON.parse(body)
+
+    if (parsed.Message == "The request is invalid.") {
+        return undefined
+    }
+
 
     return parsed
 }
@@ -147,8 +231,62 @@ async function loadMarketplace(playerName) {
 
     let parsed = JSON.parse(body)
 
+    if (parsed.Message == "The request is invalid.") {
+        return undefined
+    }
+
+
     return parsed
 }
+
+
+async function loadMint(sn, season) {
+
+    let url = `https://api.cryptoslam.io/mint?season=${season}&product=MLB%20Crypto%20Baseball&tokenId=${sn}&_=${Math.floor(Date.now())}`
+
+    let result = await fetch(url)
+
+    let body = await result.text()
+
+    let parsed = JSON.parse(body)
+
+
+    if (parsed.Message == "The request is invalid.") {
+        return undefined
+    }
+
+
+    return parsed
+
+}
+
+
+
+async function loadTokenSales(sn) {
+
+    let url = `https://api.cryptoslam.io/api/mints/sales?tokenId=${sn}&_=${Math.floor(Date.now())}`
+
+    let result = await fetch(url)
+
+    let body = await result.text()
+
+
+    let parsed = JSON.parse(body)
+
+    if (parsed.Message == "The request is invalid.") {
+        return undefined
+    }
+
+    return parsed
+
+}
+
+
+/**
+ * 
+ * End service 
+ */
+
 
 
 

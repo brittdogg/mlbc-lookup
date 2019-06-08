@@ -3,10 +3,15 @@ body {
 }
 
 .owner {
-    max-width: 150px;
+    max-width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.uniform {
+    max-width: 140px;
+    font-size: 11px;
 }
 
 .crypto {
@@ -25,3 +30,24 @@ body {
 .tab-content {
     margin-top: 15px;
 }
+
+#tabs {
+    display: none;
+}
+
+#item-info ul li {
+    font-size: 12px;
+}
+
+.card-body ul {
+    padding: 0px;
+}
+.card-body li {
+    list-style: none;
+}
+
+.card-body li strong {
+    width: 110px; 
+    display: inline-block;
+}
+
