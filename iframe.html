@@ -16,7 +16,7 @@
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
 
-        <a class="navbar-brand" href="#">Top navbar</a>
+        <a class="navbar-brand" href="#" id="name"></a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +36,31 @@
     <div class="container">
         <div class="row" id='main'>
 
-            <h1 id="name"></h1>
-            <h2 id="sn"></h2>
+            <!-- Classic tabs -->
+            <div class="classic-tabs">
+
+                <ul class="nav tabs-cyan" id="myClassicTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active show" id="sales-tab-classic" data-toggle="tab" href="#sales-tab" role="tab" aria-controls=sales-tab" aria-selected="true">Sales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="market-tab-classic" data-toggle="tab" href="#market-tab" role="tab" aria-controls="follow-classic" aria-selected="false">Market Listings</a>
+                    </li>
+
+                </ul>
+                <div class="tab-content border-right border-bottom border-left rounded-bottom" id="myClassicTabContent">
+
+                    <div class="tab-pane fade active show" id="sales-tab" role="tabpanel" aria-labelledby="sales-tab-classic">
+                    
+                    </div>
+                    <div class="tab-pane fade" id="market-tab" role="tabpanel" aria-labelledby="market-tab-classic">
+
+                    </div>
+                </div>
+                
+            </div>
+            <!-- Classic tabs -->
+
         </div>
     </div>
 

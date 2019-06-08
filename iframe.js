@@ -4,13 +4,13 @@ let playerName = getParameterByName("name")
 let playerSn = getParameterByName("sn")
 
 let h1 = document.getElementById("name")
-let h2 = document.getElementById("sn")
+// let h2 = document.getElementById("sn")
 
 playerName = playerName.trim()
 playerSn = playerSn.trim()
 
 h1.innerHTML = playerName
-h2.innerHTML = playerSn
+// h2.innerHTML = playerSn
 
 
 
@@ -25,12 +25,11 @@ async function loadCryptoslam(playerName, playerSn) {
 
     let marketplace = await loadMarketplace(playerName)
 
+    let salesDiv = document.getElementById('sales-tab')
+    let marketDiv = document.getElementById('market-tab')
 
-    let mainDiv = document.getElementById('main')
-
-
-    mainDiv.appendChild(buildSalesTable(sales))
-    mainDiv.appendChild(buildMarketplaceTable(marketplace))
+    salesDiv.appendChild(buildSalesTable(sales))
+    marketDiv.appendChild(buildMarketplaceTable(marketplace))
 
     document.getElementById('closeIframe').addEventListener('click', function() {
         closeIframe()
