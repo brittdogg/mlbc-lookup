@@ -1,6 +1,6 @@
 {
     "name": "MLBC Lookup",
-    "version": "1.1",
+    "version": "2.0",
     "description": "Look up listings & history for a player in MLB Champions",
     "permissions": [
       "activeTab", 
