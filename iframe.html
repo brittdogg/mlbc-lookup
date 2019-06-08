@@ -13,59 +13,51 @@
 
 <body>
 
-
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-
-        <a class="navbar-brand" href="#" id="name"></a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#" id="closeIframe">Close</a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Cryptoslam Info</a>
         </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item ">
+                <a class="nav-link" href="#" id="closeIframe">Close</a>
+            </li>
+        </ul>
     </nav>
 
 
     <div class="container">
-        <div class="row" id='main'>
 
-            <!-- Classic tabs -->
-            <div class="classic-tabs">
+        <button class="btn btn-primary" type="button" disabled id="spinner">
+            <span class="spinner-border spinner-border-sm" role="status"></span>
+            <span class="sr-only">Loading...</span>
+        </button>
 
-                <ul class="nav tabs-cyan" id="myClassicTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active show" id="sales-tab-classic" data-toggle="tab" href="#sales-tab" role="tab" aria-controls=sales-tab" aria-selected="true">Sales</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="market-tab-classic" data-toggle="tab" href="#market-tab" role="tab" aria-controls="follow-classic" aria-selected="false">Market Listings</a>
-                    </li>
+        <div class="row mb-4" id="item-info">
 
-                </ul>
-                <div class="tab-content border-right border-bottom border-left rounded-bottom" id="myClassicTabContent">
+        </div>
 
-                    <div class="tab-pane fade active show" id="sales-tab" role="tabpanel" aria-labelledby="sales-tab-classic">
-                    
-                    </div>
-                    <div class="tab-pane fade" id="market-tab" role="tabpanel" aria-labelledby="market-tab-classic">
+        <div class="row">
 
-                    </div>
-                </div>
-                
+            <div class="col-md-12" id="token-tab">
+
             </div>
-            <!-- Classic tabs -->
+
+            <div class="col-md-12" id="player-sales-tab">
+
+            </div>
+
+            <div class="col-md-12" id="market-tab">
+
+            </div>
+
 
         </div>
     </div>
 
 
-
+    <script src="js/moment.min.js"></script>
     <script src="js/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="js/popper.min.js" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>

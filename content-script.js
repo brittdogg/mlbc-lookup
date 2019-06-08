@@ -1,3 +1,11 @@
+var style = document.createElement('style');
+style.type = 'text/css';
+style.innerHTML = '.sellButton { background: #cccccc; color: #000000; width: 100%; text-align: right; }';
+
+
+document.head.appendChild(style)
+
+
 window.addEventListener('message', function(e) {
     if (e.data == "closeiframe") {
         closeIframe()
@@ -69,14 +77,14 @@ function _decorateCards(playerCards) {
         }
 
         let sellButton = document.createElement("BUTTON");
-        sellButton.id = "sellButton";
+        sellButton.setAttribute("class", "sellButton");
 
-        let buttonText = document.createTextNode("SELL");
+        let buttonText = document.createTextNode("Lookup ⚾");
         sellButton.appendChild(buttonText);
 
         sellButton.addEventListener("click", _sellClicked)
 
-        player.querySelector(".box-outercard").appendChild(sellButton);
+        player.querySelector(".box-outercard").parentNode.appendChild(sellButton);
     }
 
 }
@@ -88,7 +96,10 @@ function _sellClicked(e) {
 
     let listItem = node.querySelector('.box-innercard .description ul li:nth-child(6)')
 
-    // let sn2019 = listItem.querySelector('span:nth-child(1)').innerHTML
+    let yearElement = listItem.querySelector('span:nth-child(1)')
+    let yearText = yearElement.innerHTML
+
+    let season = yearText.substr(0, 4)
 
     let snElement = listItem.querySelector('span:nth-child(2)')
 
@@ -112,9 +123,9 @@ function _sellClicked(e) {
 
 
     var iframe = document.createElement('iframe');
-    iframe.src  = chrome.extension.getURL ('iframe.html?name='+ name + '&sn='+ snMlbc);
+    iframe.src  = chrome.extension.getURL ('iframe.html?name='+ name + '&sn='+ snMlbc + '&season=' + season);
 
-    iframe.setAttribute("style", "position:fixed; top: 0; left: 0; bottom: 0; right: 0; height: 100%; width: 100%; margin: 0; padding: 0; background: #000000; opacity: .95; filter: alpha(opacity=95); -moz-opacity: .95; z-index: 101;")
+    iframe.setAttribute("style", "position:fixed; top: 0; left: 0; bottom: 0; right: 0; height: 100%; width: 100%; margin: 0; padding: 0; background: #000000; z-index: 101;")
 
     document.body.appendChild(iframe);
 
