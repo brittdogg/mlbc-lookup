@@ -86,10 +86,17 @@ function _sellClicked(e) {
     let playerName = node.querySelector(".show-name").textContent;
     let name = playerName.substr(0, playerName.indexOf("#"));
 
-    let playerUrlString = name.replace(" ", "-");
+    // let playerUrlString = name.replace(" ", "-");
+
+    let iframes = document.querySelectorAll('iframe')
+    for (let i of iframes) {
+        i.remove()
+    }
+
+
 
     var iframe = document.createElement('iframe');
-    iframe.src  = chrome.extension.getURL ('iframe.html?name='+ playerUrlString + '&sn='+ snMlbc);
+    iframe.src  = chrome.extension.getURL ('iframe.html?name='+ name + '&sn='+ snMlbc);
 
     iframe.setAttribute("style", "position: fixed; bottom: 0; width: 100%; height: 500px");
 
