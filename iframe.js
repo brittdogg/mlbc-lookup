@@ -35,47 +35,44 @@ async function loadCryptoslam(playerName, playerSn) {
         closeIframe()
     })
     
-
-
 }
 
 
 function buildSalesTable(sales) {
 
     let table = `
-        <table>
-            <thead>
-                <th>Date</th>
-                <th>Season</th>
-                <th>Name</th>
-                <th>Base</th>
-                <th>Owner</th>
-                <th>Equipment</th>
-                <th>Stance</th>
-                <th>Uniform</th>
-                <th>Sales Price (ETH/USD)</th>
-            </thead>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <th>Date</th>
+                    <th>Crypto</th>
+                    <th>Owner</th>
+                    <th>Equipment</th>
+                    <th>Stance</th>
+                    <th>Uniform</th>
+                    <th>Price</th>
+                    <th>$ Price</th>
+                </thead>
     `
     
     for (let sale of sales.Items) {
         table += `
             <tr>
-                <td>${sale.SoldOnUtc}</td>
-                <td>${sale.Season}</td>
-                <td>${sale.Name}</td>
-                <td>${sale.Base}</td>
-                <td>${sale.SellerOwnerAddress}</td>
+                <td>${moment(sale.SoldOnUtc).fromNow()}</td>
+                <td class="crypto">${sale.Season} ${sale.Name} (${sale.Base})</td>
+                <td class="owner">${sale.SellerOwnerAddress}</td>
                 <td>${sale.Equipment}</td>
                 <td>${sale.StanceOpponent}</td>
                 <td>${sale.Uniform}</td>
-                <td>${sale.SalesPriceEth}/$${sale.SalesPriceUsd}</td>
+                <td class="price">Ξ ${sale.SalesPriceEth.toFixed(5)}</td>
+                <td class="price">$${sale.SalesPriceUsd.toFixed(2)}</td>
             </tr>
         `
     }
-    table += "</table>"
+    table += "</table></div>"
 
     let tableElement = document.createElement("table")
-    tableElement.setAttribute("class",'table col-md-12')
+    tableElement.setAttribute("class",'table table-striped table-bordered table-sm col-md-12 cryptoslam-table')
 
     tableElement.innerHTML = table 
 
@@ -87,39 +84,36 @@ function buildSalesTable(sales) {
 function buildMarketplaceTable(listings) {
 
     let table = `
-        <table>
-            <thead>
-                <th>Date</th>
-                <th>Season</th>
-                <th>Name</th>
-                <th>Base</th>
-                <th>Owner</th>
-                <th>Equipment</th>
-                <th>Stance</th>
-                <th>Uniform</th>
-                <th>Price</th>
-            </thead>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <th>Date</th>
+                    <th>Crypto</th>
+                    <th>Owner</th>
+                    <th>Equipment</th>
+                    <th>Stance</th>
+                    <th>Uniform</th>
+                    <th>Price</th>
+                </thead>
     `
     
     for (let listing of listings) {
         table += `
             <tr>
-                <td>${listing.CreatedOn}</td>
-                <td>${listing.Season}</td>
-                <td>${listing.Name}</td>
-                <td>${listing.Base}</td>
-                <td>${listing.OwnerDisplay}</td>
+                <td>${moment(listing.CreatedOn).fromNow()}</td>
+                <td class="crypto">${listing.Season} ${listing.Name} (${listing.Base})</td>
+                <td class="owner">${listing.OwnerDisplay}</td>
                 <td>${listing.Equipment}</td>
                 <td>${listing.StanceOpponent}</td>
                 <td>${listing.Uniform}</td>
-                <td>${listing.CurrentPriceEth}</td>
+                <td class="price">Ξ ${listing.CurrentPriceEth.toFixed(5)}</td>
             </tr>
         `
     }
-    table += "</table>"
+    table += "</table></div>"
 
     let tableElement = document.createElement("table")
-    tableElement.setAttribute("class",'table col-md-12')
+    tableElement.setAttribute("class",'table table-striped table-bordered table-sm col-md-12 cryptoslam-table')
 
 
     tableElement.innerHTML = table 

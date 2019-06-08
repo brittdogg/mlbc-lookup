@@ -1,4 +1,27 @@
 body {
     background: white;
-    border: 1px solid black;
+}
+
+.owner {
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.crypto {
+    max-width: 300px;
+}
+
+.cryptoslam-table {
+    font-size: 13px;
+    width: 100%;
+}
+
+.price {
+    text-align: right;
+}
+
+.tab-content {
+    margin-top: 15px;
 }
