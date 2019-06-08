@@ -1,3 +1,5 @@
+
+
 let playerName = getParameterByName("name")
 let playerSn = getParameterByName("sn")
 
@@ -29,6 +31,12 @@ async function loadCryptoslam(playerName, playerSn) {
 
     mainDiv.appendChild(buildSalesTable(sales))
     mainDiv.appendChild(buildMarketplaceTable(marketplace))
+
+    document.getElementById('closeIframe').addEventListener('click', function() {
+        closeIframe()
+    })
+    
+
 
 }
 
@@ -152,7 +160,9 @@ async function loadMarketplace(playerName) {
 
 
 
-
+function closeIframe() {
+    window.parent.postMessage('closeiframe', '*');
+}
 
 
 
@@ -165,7 +175,4 @@ function getParameterByName(name, url) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-
-
-
 
