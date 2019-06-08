@@ -1,6 +1,6 @@
 {
     "name": "MLBC Lookup",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Look up listings & history for a player in MLB Champions",
     "permissions": ["activeTab", "tabs", "declarativeContent", "storage", "https://mlbc.app/*"],
     "background": {
@@ -17,10 +17,10 @@
         }
     },
     "icons": {
-        "16": "images/get_started16.png",
-        "32": "images/get_started32.png",
-        "48": "images/get_started48.png",
-        "128": "images/get_started128.png"
+        "16": "images/jh-16.png",
+        "32": "images/jh-32.png",
+        "48": "images/jh-48.png",
+        "128": "images/jh-128.png"
     },
     "manifest_version": 2
 }
