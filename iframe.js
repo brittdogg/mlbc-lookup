@@ -13,116 +13,220 @@ loadCryptoslam(playerName, playerSn, season)
 
 async function loadCryptoslam(playerName, playerSn, season) {
 
-    //Show item info
-    let mint = await loadMint(playerSn, season)
-    
-    if (mint) {
-        let itemDiv = document.getElementById('item-info')
-        itemDiv.appendChild(buildInfo(mint.Items ? mint.Items[0] : null ))
-    }
 
+    //Show item info
+    let mint = await fetchMint(playerSn, season);
+    loadItemInfo(mint, playerSn, season);
 
     //Show token sales
-    let tokenSales = await loadTokenSales(playerSn)
-
-    if (tokenSales) {
-        $('#token-table').DataTable( {
-            "order": [ 0, 'desc' ],
-            'searching': false,
-            'lengthChange': false,
-            'pagingType': 'simple_numbers',
-            data: convertJsonArray(tokenSales),
-            columns: [
-                { 
-                    title: "Date",
-                    "render": renderDate
-                },
-                { title: "Crypto" },
-                { title: "Owner", className: 'owner' },
-                { title: "Equipment" },
-                { title: "Stance" },
-                { title: "Uniform", className: 'uniform' },
-                { title: "Price", className: 'price' },
-                { title: "$ Price", className: 'price'  }
-            ]
-        });
-        document.getElementById('token-table-wrapper').style.display = "block"
-    }
-
-
+    let tokenSales = await fetchTokenSales(playerSn);
+    loadTokenSales(tokenSales, playerSn);
 
     //Show player sales
-    let playerSales = await loadPlayerSales(playerName)
-    if (playerSales) {
-
-        $('#player-sales-table').DataTable( {
-            "order": [ 0, 'desc' ],
-            'searching': false,
-            'lengthChange': false,
-            'pagingType': 'simple_numbers',
-            data: convertJsonArray(playerSales),
-            columns: [
-                { 
-                    title: "Date",
-                    "render":renderDate
-                },
-                { title: "Crypto" },
-                { title: "Owner", className: 'owner' },
-                { title: "Equipment" },
-                { title: "Stance" },
-                { title: "Uniform", className: 'uniform' },
-                { title: "Price", className: 'price' },
-                { title: "$ Price", className: 'price'  }
-            ]
-        });
-        document.getElementById('player-sales-table-wrapper').style.display = "block"
-
-    }
-
-
-
+    let playerSales = await fetchPlayerSales(playerName);
+    loadPlayerSales(playerSales, playerName);
 
     //Show marketplace
-    let marketplace = await loadMarketplace(playerName)
-
-    if (marketplace) {
-
-        $('#market-table').DataTable( {
-            "order": [ 0, 'desc' ],
-            'searching': false,
-            'lengthChange': false,
-            'pagingType': 'simple_numbers',
-            data: convertJsonArray(marketplace),
-            columns: [
-                { 
-                    title: "Date",
-                    "render": renderDate
-                },
-                { title: "Crypto" },
-                { title: "Owner", className: 'owner' },
-                { title: "Equipment" },
-                { title: "Stance" },
-                { title: "Uniform", className: 'uniform' },
-                { title: "Price", className: 'price' }            
-            ]
-        });
-
-        document.getElementById('market-table-wrapper').style.display = "block"
+    let marketplace = await fetchMarketplace(playerName);
+    loadMarketplace(marketplace, playerName);
 
 
+    let playerStats = await fetchMlbStats(mint, playerName)
+    loadPlayerStats(playerStats)
 
-    }
-    
-
-    document.getElementById('closeIframe').addEventListener('click', function() {
+    document.getElementById('closeIframe').addEventListener('click', function () {
         closeIframe()
     })
 
 
     document.getElementById('spinner').remove()
 
-    
+
 }
+
+
+
+
+
+function loadMarketplace(marketplace, playerName) {
+
+    if (marketplace) {
+
+        $('#market-table').DataTable({
+            "order": [0, 'desc'],
+            'searching': false,
+            'lengthChange': false,
+            'pagingType': 'simple_numbers',
+            data: convertJsonArray(marketplace),
+            columns: [
+                {
+                    title: "Date",
+                    "render": renderDate
+                },
+                { title: "Crypto" },
+                { title: "Owner", className: 'owner' },
+                { title: "Equipment" },
+                { title: "Stance" },
+                { title: "Uniform", className: 'uniform' },
+                { title: "Price", className: 'price' }
+            ]
+        });
+
+        document.getElementById('market-table-wrapper').style.display = "block";
+    }
+}
+
+function loadPlayerSales(playerSales, playerName) {
+
+
+    if (playerSales) {
+
+        $('#player-sales-table').DataTable({
+            "order": [0, 'desc'],
+            'searching': false,
+            'lengthChange': false,
+            'pagingType': 'simple_numbers',
+            data: convertJsonArray(playerSales),
+            columns: [
+                {
+                    title: "Date",
+                    "render": renderDate
+                },
+                { title: "Crypto" },
+                { title: "Owner", className: 'owner' },
+                { title: "Equipment" },
+                { title: "Stance" },
+                { title: "Uniform", className: 'uniform' },
+                { title: "Price", className: 'price' },
+                { title: "$ Price", className: 'price' }
+            ]
+        });
+
+        document.getElementById('player-sales-table-wrapper').style.display = "block";
+    }
+
+}
+
+function loadTokenSales(tokenSales, playerSn) {
+
+    if (tokenSales) {
+
+        $('#token-table').DataTable({
+            "order": [0, 'desc'],
+            'searching': false,
+            'lengthChange': false,
+            'pagingType': 'simple_numbers',
+            data: convertJsonArray(tokenSales),
+            columns: [
+                {
+                    title: "Date",
+                    "render": renderDate
+                },
+                { title: "Crypto" },
+                { title: "Owner", className: 'owner' },
+                { title: "Equipment" },
+                { title: "Stance" },
+                { title: "Uniform", className: 'uniform' },
+                { title: "Price", className: 'price' },
+                { title: "$ Price", className: 'price' }
+            ]
+        });
+
+        document.getElementById('token-table-wrapper').style.display = "block";
+    }
+
+}
+
+function loadItemInfo(mint, playerSn, season) {
+
+    if (mint) {
+
+        let itemDiv = document.getElementById('item-info');
+        itemDiv.appendChild(buildInfo(mint.Items ? mint.Items[0] : null));
+
+    }
+
+}
+
+
+
+function loadPlayerStats(stats) {
+
+    if (!stats) return
+
+    if (stats.hitting && stats.hitting.length > 0) {
+
+        $('#hitting-table').DataTable({
+            "order": [0, 'desc'],
+            'searching': false,
+            'lengthChange': false,
+            'paging': false,
+            'info': false,
+            data: convertJsonArray(stats.hitting),
+            columns: [
+                { title: "YEAR" },
+                { title: "LG" },
+                { title: "TM" },
+                { title: "G" },
+                { title: "AB" },
+                { title: "R" },
+                { title: "H" },
+                { title: "2B" },
+                { title: "3B" },
+                { title: "HR" },
+                { title: "RBI" },
+                { title: "SB" },
+                { title: "CS" },
+                { title: "BB" },
+                { title: "SO" },
+                { title: "AVG" },
+                { title: "OBP" },
+                { title: "SLG" },
+                { title: "OPS"}
+            ]
+        });
+
+        document.getElementById('hitting-table-wrapper').style.display = "block";
+    }
+
+    if (stats.pitching && stats.pitching.length > 0) {
+
+        $('#pitching-table').DataTable({
+            "order": [0, 'desc'],
+            'searching': false,
+            'lengthChange': false,
+            'paging': false,
+            'info': false,
+            data: convertJsonArray(stats.pitching),
+            columns: [
+                { title: "YEAR" },
+                { title: "LG" },
+                { title: "TM" },
+                { title: "W" },
+                { title: "L" },
+                { title: "ERA" },
+                { title: "G" },
+                { title: "GS" },
+                { title: "SV" },
+                { title: "IP" },
+                { title: "H" },
+                { title: "R" },
+                { title: "ER" },
+                { title: "HR" },
+                { title: "BB" },
+                { title: "IBB" },
+                { title: "SO" }
+            ]
+        });
+
+        document.getElementById('pitching-table-wrapper').style.display = "block";
+    }
+
+}
+
+
+
+
 
 
 
@@ -134,7 +238,7 @@ function buildInfo(item) {
 
     if (!item) {
         return divElement
-    } 
+    }
 
     let div = `
         <div class="card-body">
@@ -160,10 +264,10 @@ function buildInfo(item) {
         </div>
     `
 
-    
-    divElement.setAttribute("class",'card col-md-12')
 
-    divElement.innerHTML = div 
+    divElement.setAttribute("class", 'card col-md-12')
+
+    divElement.innerHTML = div
 
     return divElement
 
@@ -187,7 +291,7 @@ function buildInfo(item) {
  */
 
 
-async function loadPlayerSales(playerName) {
+async function fetchPlayerSales(playerName) {
 
     let url = `https://api.cryptoslam.io/api/player/${playerName}/sales?num=500&_=${Math.floor(Date.now())}`
 
@@ -230,7 +334,7 @@ async function loadPlayerSales(playerName) {
 }
 
 
-async function loadMarketplace(playerName) {
+async function fetchMarketplace(playerName) {
 
     if (!playerName) return undefined
 
@@ -273,7 +377,7 @@ async function loadMarketplace(playerName) {
 }
 
 
-async function loadMint(sn, season) {
+async function fetchMint(sn, season) {
 
     if (!sn) return undefined
 
@@ -297,7 +401,7 @@ async function loadMint(sn, season) {
 
 
 
-async function loadTokenSales(sn) {
+async function fetchTokenSales(sn) {
 
     let url = `https://api.cryptoslam.io/api/mints/sales?tokenId=${sn}&_=${Math.floor(Date.now())}`
 
@@ -337,12 +441,165 @@ async function loadTokenSales(sn) {
 }
 
 
+async function fetchMlbStats(mint, playerName) {
+
+    if (!mint || !mint.Items || !mint.Items[0]) return undefined
+
+    let mintItem = mint.Items[0]
+
+    let playerInfo = await findPlayerId(playerName, mintItem.Season, mintItem.Team)
+
+    let hitting = await getHittingStats(playerInfo.player_id, 2019)
+    let pitching = await getPitchingStats(playerInfo.player_id, 2019)
+
+
+    let hittingTranslated = []
+    for (let row of hitting) {
+        if (!row) continue
+        hittingTranslated.push({
+            season: row.season,
+            league: row.league ,
+            team: row.team_abbrev,
+            g: row.g,
+            ab: row.ab,
+            r: row.r, 
+            h: row.h,
+            doubles: row.d,
+            triples: row.t,
+            hr: row.hr,
+            rbi: row.rbi,
+            sb: row.sb,
+            cs: row.cs,
+            bb: row.bb,
+            so: row.so,
+            avg: row.avg,
+            obp: row.obp,
+            slg: row.slg,
+            ops: row.ops
+        })
+    }
+
+
+
+
+    let pitchingTranslated = []
+    for (let row of pitching) {
+        if (!row) continue
+        pitchingTranslated.push({
+            season: row.season,
+            league: row.league ,
+            team: row.team_abbrev,
+            w: row.w,
+            l: row.l,
+            era: row.era,
+            g: row.g,
+            gs: row.gs,
+            sv: row.sv,
+            ip: row.ip,
+            h: row.h,
+            r: row.r,
+            er: row.er,
+            hr: row.hr,
+            bb: row.bb,
+            ibb: row.ibb,
+            so: row.so
+        })
+    }
+
+    return {
+        hitting: hittingTranslated,
+        pitching: pitchingTranslated
+    }
+
+}
+
+
+async function findPlayerId(playerName, season, teamName) {
+
+    let url = `https://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code=%27mlb%27&active_sw=%27Y%27&name_part=%27${playerName}%25%27`
+
+    let result = await fetch(url)
+    let parsed = JSON.parse(await result.text())
+
+    //Could have multiple results. If there's a single result it puts it in an object instead of an array. Fix that.
+    let playerMatches = parsed.search_player_all.queryResults.row
+
+    if (!isIterable(playerMatches)) {
+        playerMatches = [playerMatches]
+    }
+
+    let matchingPlayer = false
+    for (let playerMatch of playerMatches) {
+        if (!playerMatch) continue
+        let teams = await getCareerTeamsForPlayer(playerMatch.player_id, season)
+
+        for (let team of teams) {
+            if (team.team == teamName) {
+                matchingPlayer = playerMatch
+            }
+        }
+    }
+
+    return matchingPlayer
+}
+
+async function getCareerTeamsForPlayer(playerId, season) {
+
+    let url = `https://lookup-service-prod.mlb.com/json/named.player_teams.bam?season=${season}&player_id=${playerId}`
+    let result = await fetch(url)
+    let parsed = JSON.parse(await result.text())
+
+    let results = parsed.player_teams.queryResults.row
+
+    if (!isIterable(results)) {
+        results = [results]
+    }
+
+    return results
+}
+
+
+async function getHittingStats(playerId, season) {
+
+    if (!playerId) return []
+
+    let url = `https://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type='R'&season=${season}&player_id=${playerId}`
+    let result = await fetch(url)
+    let parsed = JSON.parse(await result.text())
+
+    let results = parsed.sport_hitting_tm.queryResults.row
+
+    if (!isIterable(results)) {
+        results = [results]
+    }
+
+    return results
+}
+
+async function getPitchingStats(playerId, season) {
+
+    if (!playerId) return []
+
+    let url = `https://lookup-service-prod.mlb.com/json/named.sport_pitching_tm.bam?league_list_id='mlb'&game_type='R'&season=${season}&player_id=${playerId}`
+    let result = await fetch(url)
+    let parsed = JSON.parse(await result.text())
+
+    let results = parsed.sport_pitching_tm.queryResults.row
+
+    if (!isIterable(results)) {
+        results = [results]
+    }
+
+    return results
+}
+
+
 /**
  * 
  * End service 
  */
 
-function renderDate( data, type, row, meta ) {
+function renderDate(data, type, row, meta) {
 
     if (type == "sort") {
         return moment(data).unix()
@@ -352,7 +609,7 @@ function renderDate( data, type, row, meta ) {
     var local = utc.local()
 
     return local.fromNow()
-} 
+}
 
 
 
@@ -373,10 +630,10 @@ function getParameterByName(name, url) {
 }
 
 
-function json2array(json){
+function json2array(json) {
     var result = [];
     var keys = Object.keys(json);
-    keys.forEach(function(key){
+    keys.forEach(function (key) {
         result.push(json[key]);
     });
     return result;
@@ -396,7 +653,7 @@ function convertJsonArray(json) {
 function isIterable(obj) {
     // checks for null and undefined
     if (obj == null) {
-      return false;
+        return false;
     }
     return typeof obj[Symbol.iterator] === 'function';
-  }
+}

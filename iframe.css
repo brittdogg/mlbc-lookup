@@ -52,9 +52,19 @@ body {
     display: inline-block;
 }
 
+#hitting-table-wrapper {
+    display: none;
+}
+
+#pitching-table-wrapper {
+    display:none;
+}
+
 #token-table-wrapper {
     display: none;
 }
+
+
 
 #player-sales-table-wrapper {
     display: none;
