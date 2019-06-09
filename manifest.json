@@ -1,7 +1,7 @@
 {
     "name": "MLBC Lookup",
-    "version": "2.0",
-    "description": "Look up listings & history for a player in MLB Champions",
+    "version": "2.1",
+    "description": "Look up listings & sales history for a player in MLB Champions",
     "permissions": [
       "activeTab", 
       "tabs", 
