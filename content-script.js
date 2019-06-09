@@ -125,7 +125,7 @@ function _sellClicked(e) {
     var iframe = document.createElement('iframe');
     iframe.src  = chrome.extension.getURL ('iframe.html?name='+ name + '&sn='+ snMlbc + '&season=' + season);
 
-    iframe.setAttribute("style", "position:fixed; top: 0; left: 0; bottom: 0; right: 0; height: 100%; width: 100%; margin: 0; padding: 0; background: #000000; z-index: 101;")
+    iframe.setAttribute("style", "position:fixed; top: 0; left: 0; bottom: 0; right: 0; height: 90%; width: 90%; margin: auto; padding: 0; background: #000000; z-index: 101;")
 
     document.body.appendChild(iframe);
 
