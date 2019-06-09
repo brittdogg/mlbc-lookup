@@ -72,7 +72,7 @@ function _decorateCards(playerCards) {
     for (let player of playerCards) {
 
         // prevent adding multiple sell buttons to the same card.
-        if (player.querySelector(".box-outercard").querySelector("#sellButton") != undefined) {
+        if (player.querySelector(".box-outercard").parentNode.querySelector(".sellButton") != undefined) {
             break;
         }
 

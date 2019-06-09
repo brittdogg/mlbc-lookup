@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="iframe.css">
 
 </head>
@@ -14,7 +15,7 @@
 <body>
 
     <nav class="navbar navbar-dark fixed-top bg-dark mb-4">
-        
+
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Cryptoslam Info</a>
         </div>
@@ -40,16 +41,25 @@
 
         <div class="row">
 
-            <div class="col-md-12" id="token-tab">
-
+            <div id="token-table-wrapper" class="col-md-12 my-4 p-4 table-responsive card">
+                <h3>Token Sales</h3>
+                <table id="token-table"
+                    class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%">
+                </table>
             </div>
 
-            <div class="col-md-12" id="player-sales-tab">
-
+            <div id="player-sales-table-wrapper" class="col-md-12 my-4 p-4 table-responsive card">
+                <h3>Player Sales</h3>
+                <table id="player-sales-table"
+                    class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%">
+                </table>
             </div>
-
-            <div class="col-md-12" id="market-tab">
-
+            
+            <div id="market-table-wrapper" class="col-md-12 my-4 p-4 table-responsive card">
+                <h3>Market Listings</h3>
+                <table id="market-table"
+                    class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%">
+                </table>
             </div>
 
 
@@ -59,6 +69,7 @@
 
     <script src="js/moment.min.js"></script>
     <script src="js/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables.min.js"></script>
     <script src="js/popper.min.js" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="iframe.js"></script>
