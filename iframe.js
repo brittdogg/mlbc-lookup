@@ -157,7 +157,7 @@ function loadPlayerStats(stats) {
     if (stats.hitting && stats.hitting.length > 0) {
 
         $('#hitting-table').DataTable({
-            "order": [0, 'desc'],
+            "order": [0, 'asc'],
             'searching': false,
             'lengthChange': false,
             'paging': false,
@@ -192,7 +192,7 @@ function loadPlayerStats(stats) {
     if (stats.pitching && stats.pitching.length > 0) {
 
         $('#pitching-table').DataTable({
-            "order": [0, 'desc'],
+            "order": [0, 'asc'],
             'searching': false,
             'lengthChange': false,
             'paging': false,
@@ -449,12 +449,24 @@ async function fetchMlbStats(mint, playerName) {
 
     let playerInfo = await findPlayerId(playerName, mintItem.Season, mintItem.Team)
 
-    let hitting = await getHittingStats(playerInfo.player_id, 2019)
-    let pitching = await getPitchingStats(playerInfo.player_id, 2019)
+    let firstSeason = await getFirstSeason(playerInfo.player_id)
+
+    let hittingSeasons = []
+    let pitchingSeasons = []
+    for (let season = firstSeason; season <= 2019; season++) {
+
+        let hitting = await getHittingStats(playerInfo.player_id, season)
+        hittingSeasons = hittingSeasons.concat(hitting)
+
+        let pitching = await getPitchingStats(playerInfo.player_id, season)
+        pitchingSeasons = pitchingSeasons.concat(pitching)
+    }
+
+    
 
 
     let hittingTranslated = []
-    for (let row of hitting) {
+    for (let row of hittingSeasons) {
         if (!row) continue
         hittingTranslated.push({
             season: row.season,
@@ -483,7 +495,7 @@ async function fetchMlbStats(mint, playerName) {
 
 
     let pitchingTranslated = []
-    for (let row of pitching) {
+    for (let row of pitchingSeasons) {
         if (!row) continue
         pitchingTranslated.push({
             season: row.season,
@@ -531,7 +543,7 @@ async function findPlayerId(playerName, season, teamName) {
     let matchingPlayer = false
     for (let playerMatch of playerMatches) {
         if (!playerMatch) continue
-        let teams = await getCareerTeamsForPlayer(playerMatch.player_id, season)
+        let teams = await getTeamsForPlayerAndSeason(playerMatch.player_id, season)
 
         for (let team of teams) {
             if (team.team == teamName) {
@@ -543,7 +555,7 @@ async function findPlayerId(playerName, season, teamName) {
     return matchingPlayer
 }
 
-async function getCareerTeamsForPlayer(playerId, season) {
+async function getTeamsForPlayerAndSeason(playerId, season) {
 
     let url = `https://lookup-service-prod.mlb.com/json/named.player_teams.bam?season=${season}&player_id=${playerId}`
     let result = await fetch(url)
@@ -557,6 +569,34 @@ async function getCareerTeamsForPlayer(playerId, season) {
 
     return results
 }
+
+
+async function getFirstSeason(playerId) {
+
+    let url = `https://lookup-service-prod.mlb.com/json/named.player_teams.bam?player_id=${playerId}`
+    let result = await fetch(url)
+    let parsed = JSON.parse(await result.text())
+
+    let results = parsed.player_teams.queryResults.row
+
+    if (!isIterable(results)) {
+        results = [results]
+    }
+
+    let firstSeason = 0
+
+    for (let result of results) {
+
+        if (result.league_season < firstSeason || !firstSeason) {
+            firstSeason = result.league_season
+        }
+
+    }
+
+    return firstSeason
+}
+
+
 
 
 async function getHittingStats(playerId, season) {
