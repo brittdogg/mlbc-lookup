@@ -56,6 +56,10 @@ body {
     display: none;
 }
 
+#population-table-wrapper {
+    display: none;
+}
+
 #pitching-table-wrapper {
     display:none;
 }

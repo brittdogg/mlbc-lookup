@@ -30,6 +30,9 @@ async function loadCryptoslam(playerName, playerSn, season) {
     let marketplace = await fetchMarketplace(playerName);
     loadMarketplace(marketplace, playerName);
 
+    //Population report
+    let population = await fetchPopulationReport(playerName)
+    loadPopulationReport(population)
 
     let playerStats = await fetchMlbStats(mint, playerName)
     loadPlayerStats(playerStats)
@@ -224,7 +227,27 @@ function loadPlayerStats(stats) {
 
 }
 
+function loadPopulationReport(population) {
 
+    if (population) {
+
+        $('#population-table').DataTable({
+            "order": [1, 'asc'],
+            'searching': false,
+            'lengthChange': false,
+            'pagingType': 'simple',
+            data: convertJsonArray(population),
+            columns: [
+                { title: "Season" },
+                { title: "Type"},
+                { title: "Team" },
+                { title: "Total (On Sale)" }            ]
+        });
+
+        document.getElementById('population-table-wrapper').style.display = "block";
+    }
+
+}
 
 
 
@@ -433,6 +456,47 @@ async function fetchTokenSales(sn) {
             Uniform: record.Uniform,
             PriceEth: `Ξ ${record.SalesPriceEth.toFixed(5)}`,
             PriceUSD: `$${record.SalesPriceUsd.toFixed(2)}`
+        })
+    }
+
+    return records
+
+}
+
+
+async function fetchPopulationReport(playerName) {
+
+    if (!playerName) return undefined
+
+    let url = `https://api.cryptoslam.io/api/player/${playerName}/population-report?num=500&_=${Math.floor(Date.now())}`
+
+    let result = await fetch(url)
+
+    let body = await result.text()
+
+
+    let parsed = JSON.parse(body)
+
+    if (parsed.Message == "The request is invalid.") {
+        return undefined
+    }
+
+    if (!parsed.Items) {
+        return undefined
+    }
+
+    if (!isIterable(parsed.Items)) {
+        return undefined
+    }
+
+    let records = []
+
+    for (let record of parsed.Items ) {
+        records.push({
+            Season: record.Season,
+            Type: record.Value,
+            Team: record.Team,
+            Population: `${record.Population} (${record.OnSaleCount})`
         })
     }
 
