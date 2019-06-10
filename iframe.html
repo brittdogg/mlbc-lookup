@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="iframe.css">
 
 </head>
@@ -14,7 +15,7 @@
 <body>
 
     <nav class="navbar navbar-dark fixed-top bg-dark mb-4">
-        
+
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Cryptoslam Info</a>
         </div>
@@ -38,27 +39,41 @@
 
         </div>
 
-        <div class="row">
+        <div id='hitting-table-wrapper' class="row my-4 p-4 table-responsive card">
+            <h5>Hitting</h5>
+            <table id="hitting-table" class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%"></table>
+        </div>
 
-            <div class="col-md-12" id="token-tab">
+        <div id='pitching-table-wrapper' class="row my-4 p-4 table-responsive card">
+            <h5>Pitching</h5>
+            <table id="pitching-table" class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%"></table>
+        </div>
 
-            </div>
+        <div id='population-table-wrapper' class="row my-4 p-4 table-responsive card">
+            <h5>Population</h5>
+            <table id="population-table" class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%"></table>
+        </div>
 
-            <div class="col-md-12" id="player-sales-tab">
+        <div id="token-table-wrapper" class="row my-4 p-4 table-responsive card">
+            <h5>Token Sales</h5>
+            <table id="token-table" class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%"></table>
+        </div>
 
-            </div>
+        <div id="player-sales-table-wrapper" class="row my-4 p-4 table-responsive card">
+            <h5>Player Sales</h5>
+            <table id="player-sales-table" class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%"></table>
+        </div>
 
-            <div class="col-md-12" id="market-tab">
-
-            </div>
-
-
+        <div id="market-table-wrapper" class="row my-4 p-4 table-responsive card">
+            <h5>Market Listings</h5>
+            <table id="market-table" class="display table table-striped table-sm col-md-12 cryptoslam-table" width="100%"></table>
         </div>
     </div>
 
 
     <script src="js/moment.min.js"></script>
     <script src="js/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables.min.js"></script>
     <script src="js/popper.min.js" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="iframe.js"></script>

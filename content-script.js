@@ -72,7 +72,7 @@ function _decorateCards(playerCards) {
     for (let player of playerCards) {
 
         // prevent adding multiple sell buttons to the same card.
-        if (player.querySelector(".box-outercard").querySelector("#sellButton") != undefined) {
+        if (player.querySelector(".box-outercard").parentNode.querySelector(".sellButton") != undefined) {
             break;
         }
 
@@ -112,8 +112,6 @@ function _sellClicked(e) {
 
     let playerName = node.querySelector(".show-name").textContent;
     let name = playerName.substr(0, playerName.indexOf("#"));
-
-    // let playerUrlString = name.replace(" ", "-");
 
     let iframes = document.querySelectorAll('iframe')
     for (let i of iframes) {
