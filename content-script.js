@@ -1,6 +1,6 @@
 var style = document.createElement('style');
 style.type = 'text/css';
-style.innerHTML = '.sellButton { background: #cccccc; color: #000000; width: 100%; text-align: right; }';
+style.innerHTML = '.sellButton { background: #cccccc; color: #000000; width: 100%; height: 40px; font-size: larger; }';
 
 
 document.head.appendChild(style)
@@ -79,7 +79,7 @@ function _decorateCards(playerCards) {
         let sellButton = document.createElement("BUTTON");
         sellButton.setAttribute("class", "sellButton");
 
-        let buttonText = document.createTextNode("Lookup ⚾");
+        let buttonText = document.createTextNode("⚾Lookup ⚾");
         sellButton.appendChild(buttonText);
 
         sellButton.addEventListener("click", _sellClicked)
