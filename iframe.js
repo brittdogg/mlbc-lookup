@@ -610,7 +610,7 @@ async function findPlayerId(playerName, season, teamName) {
         let teams = await getTeamsForPlayerAndSeason(playerMatch.player_id, season)
 
         for (let team of teams) {
-            if (team.team == teamName) {
+            if (team && team.team == teamName) {
                 matchingPlayer = playerMatch
             }
         }
