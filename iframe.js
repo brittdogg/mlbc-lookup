@@ -145,7 +145,7 @@ function loadItemInfo(mint, playerSn, season) {
     if (mint) {
 
         let itemDiv = document.getElementById('item-info');
-        itemDiv.appendChild(buildInfo(mint.Items ? mint.Items[0] : null));
+        itemDiv.appendChild(buildInfo(mint));
 
     }
 
@@ -316,7 +316,7 @@ function buildInfo(item) {
 
 async function fetchPlayerSales(playerName) {
 
-    let url = `https://api.cryptoslam.io/api/player/${playerName}/sales?num=500&_=${Math.floor(Date.now())}`
+    let url = `https://api.cryptoslam.io/api/player/sales?name=${playerName}&num=500&_=${Math.floor(Date.now())}`
 
     let result = await fetch(url)
 
@@ -328,18 +328,18 @@ async function fetchPlayerSales(playerName) {
         return undefined
     }
 
-    if (!parsed.Items) {
+    if (!parsed) {
         return undefined
     }
 
-    if (!isIterable(parsed.Items)) {
+    if (!isIterable(parsed)) {
         return undefined
     }
 
 
     let records = []
 
-    for (let record of parsed.Items) {
+    for (let record of parsed) {
         records.push({
             Date: record.SoldOnUtc,
             Crypto: `<a href="https://mlbc.app/figure/${record.TokenId}" target="blank">${record.Season} ${record.Name} (${record.Base})</a>`,
@@ -361,7 +361,7 @@ async function fetchMarketplace(playerName) {
 
     if (!playerName) return undefined
 
-    let url = `https://api.cryptoslam.io/api/player/${playerName}/marketplace?num=500&_=${Math.floor(Date.now())}`
+    let url = `https://api.cryptoslam.io/api/player/marketplace?&name=${playerName}&num=500&_=${Math.floor(Date.now())}`
 
     let result = await fetch(url)
 
@@ -404,7 +404,7 @@ async function fetchMint(sn, season) {
 
     if (!sn) return undefined
 
-    let url = `https://api.cryptoslam.io/mint?season=${season}&product=MLB%20Crypto%20Baseball&tokenId=${sn}&_=${Math.floor(Date.now())}`
+    let url = `https://api.cryptoslam.io/api/mints?season=${season}&product=MLB%20Crypto%20Baseball&tokenId=${sn}&_=${Math.floor(Date.now())}`
 
     let result = await fetch(url)
 
@@ -468,7 +468,7 @@ async function fetchPopulationReport(playerName) {
 
     if (!playerName) return undefined
 
-    let url = `https://api.cryptoslam.io/api/player/${playerName}/population-report?num=500&_=${Math.floor(Date.now())}`
+    let url = `https://api.cryptoslam.io/api/player/population-report?name=${playerName}&num=500&_=${Math.floor(Date.now())}`
 
     let result = await fetch(url)
 
@@ -481,17 +481,17 @@ async function fetchPopulationReport(playerName) {
         return undefined
     }
 
-    if (!parsed.Items) {
+    if (!parsed) {
         return undefined
     }
 
-    if (!isIterable(parsed.Items)) {
+    if (!isIterable(parsed)) {
         return undefined
     }
 
     let records = []
 
-    for (let record of parsed.Items ) {
+    for (let record of parsed ) {
         records.push({
             Season: record.Season,
             Type: record.Value,
@@ -507,11 +507,9 @@ async function fetchPopulationReport(playerName) {
 
 async function fetchMlbStats(mint, playerName) {
 
-    if (!mint || !mint.Items || !mint.Items[0]) return undefined
+    if (!mint) return undefined
 
-    let mintItem = mint.Items[0]
-
-    let playerInfo = await findPlayerId(playerName, mintItem.Season, mintItem.Team)
+    let playerInfo = await findPlayerId(playerName, mint.Season, mint.Team)
 
     let firstSeason = await getFirstSeason(playerInfo.player_id)
 
@@ -610,7 +608,7 @@ async function findPlayerId(playerName, season, teamName) {
         let teams = await getTeamsForPlayerAndSeason(playerMatch.player_id, season)
 
         for (let team of teams) {
-            if (team.team == teamName) {
+            if (team && team.team == teamName) {
                 matchingPlayer = playerMatch
             }
         }
