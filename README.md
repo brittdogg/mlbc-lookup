@@ -8,7 +8,5 @@ Make it easy to value and sell your MLB Champions figures! Click the Lookup butt
 
 Market data comes from cryptoslam.io, we just show it to you on the same page :)
 
-Updated 2019-06-10: Player stats direct from the MLB API are now shown on the lookup panel.
-
-
-
+2019-07-09: Fixed player stats following CryptoSlam URL pattern update.
+2019-06-10: Player stats direct from the MLB API are now shown on the lookup panel.
